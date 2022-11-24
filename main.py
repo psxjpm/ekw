@@ -28,22 +28,6 @@ while True:
 
     if hands:
         # Hand 1
-        # hand = hands[0]
-        # lmList = hand["lmList"]  # Get list of 21 Landmark points
-        # bbox = hand["bbox"]
-        # centerPoint = hand["center"]
-        # handType = hand["type"]
-        # pointIndex = lmList[8][0:2] #Switch to 0:3 for 3d
-        # #Starburst
-        # fingers = detector.fingersUp(hand)
-        #
-        #
-        # if handType == "Left":
-        #     for lm in lmList:
-        #         data.extend([lm[0], h - lm[1], lm[2]])
-        #     sock.sendto(str.encode(str(data)), serverAddressPort)
-
-        # Hand 1
         hand1 = hands[0]
         lmList1 = hand1["lmList"]  # Get list of 21 Landmark points
         bbox1 = hand1["bbox"]
@@ -52,28 +36,27 @@ while True:
         pointIndex1 = lmList1[8][0:2] #Switch to 0:3 for 3d
         #Starburst
         fingers1 = detector.fingersUp(hand1)
-        print(handType1)
 
+        if len(hands)==2:
+            # Hand 2
+            hand2 = hands[1]
+            lmList2 = hand2["lmList"]  # Get list of 21 Landmark points
+            bbox2 = hand2["bbox"]
+            centerPoint2 = hand2["center"]
+            handType2 = hand2["type"]
+            pointIndex2 = lmList2[8][0:2] #Switch to 0:3 for 3d
+            # Starburst
+            fingers2 = detector.fingersUp(hand2)
 
-        if handType1 == "Left":
-            for lm1 in lmList1:
-                data.extend([lm1[0], h - lm1[1], lm1[2]])
-            sock.sendto(str.encode(str(data)), serverAddressPort)
+            if handType1 == "Left":
+                for lm1 in lmList1:
+                    data.extend([lm1[0], h - lm1[1], lm1[2]])
+                sock.sendto(str.encode(str(data)), serverAddressPort)
 
-    # if len(hands==2):
-    #     # Hand 2
-    #     hand2 = hands[1]
-    #     lmList2 = hand2["lmList"]  # Get list of 21 Landmark points
-    #     bbox2 = hand2["bbox"]
-    #     centerPoint2 = hand2["center"]
-    #     handType2 = hand2["type"]
-    #     pointIndex2 = lmList2[8][0:2] #Switch to 0:3 for 3d
-    #     fingers2 = detector.fingersUp(hand2)
-    #
-    #     for lm2 in lmList2:
-    #         data2.extend([lm2[0], h - lm2[1], lm2[2]])
-    #
-    #     sock2.sendto(str.encode(str(data2)), serverAddressPort)
+            # for lm2 in lmList2:
+            #     data2.extend([lm2[0], h - lm2[1], lm2[2]])
+            #
+            # sock2.sendto(str.encode(str(data2)), serverAddressPort)
 
     # Display
     cv2.imshow("Image", cv2.flip(img, 1))

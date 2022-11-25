@@ -11,10 +11,12 @@ h, w, _ = img.shape
 detector = HandDetector(detectionCon=0.8, maxHands=2)
 
 #Using UDP (SOCK_DGRAM)
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-serverAddressPort = ("127.0.0.1", 5052)
+# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+serverAddressPort1 = ("127.0.0.1", 5052)
+
+sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+serverAddressPort2 = ("127.0.0.1", 5053)
 
 while True:
     # Get image frame from webcam
@@ -22,9 +24,9 @@ while True:
     # Find the hand and its landmarks
     hands, img = detector.findHands(img)  # with draw
     # hands = detector.findHands(img, draw=False)  # without draw
-    data = []
-    # data1 = []
-    # data2 = []
+    # data = []
+    data1 = []
+    data2 = []
 
     if hands:
         # Hand 1
@@ -36,6 +38,10 @@ while True:
         pointIndex1 = lmList1[8][0:2] #Switch to 0:3 for 3d
         #Starburst
         fingers1 = detector.fingersUp(hand1)
+        for lm1 in lmList1:
+            data1.extend([lm1[0], h - lm1[1], lm1[2]])
+        sock1.sendto(str.encode(str(data1)), serverAddressPort1)
+        # if handType1 == "Left":
 
         if len(hands)==2:
             # Hand 2
@@ -47,16 +53,9 @@ while True:
             pointIndex2 = lmList2[8][0:2] #Switch to 0:3 for 3d
             # Starburst
             fingers2 = detector.fingersUp(hand2)
-
-            if handType1 == "Left":
-                for lm1 in lmList1:
-                    data.extend([lm1[0], h - lm1[1], lm1[2]])
-                sock.sendto(str.encode(str(data)), serverAddressPort)
-
-            # for lm2 in lmList2:
-            #     data2.extend([lm2[0], h - lm2[1], lm2[2]])
-            #
-            # sock2.sendto(str.encode(str(data2)), serverAddressPort)
+            for lm2 in lmList2:
+                data2.extend([lm2[0], h - lm2[1], lm2[2]])
+            sock2.sendto(str.encode(str(data2)), serverAddressPort2)
 
     # Display
     cv2.imshow("Image", cv2.flip(img, 1))

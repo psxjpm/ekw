@@ -39,14 +39,14 @@ while True:
         pointIndex1 = lmList1[8][0:2] #Switch to 0:3 for 3d
         #Starburst
         fingers1 = detector.fingersUp(hand1)
-        for lm1 in lmList1:
-            data1.extend([lm1[0], h - lm1[1], lm1[2]])
-        sock1.sendto(str.encode(str(data1)), serverAddressPort1)
+        # for lm1 in lmList1:
+        #     data1.extend([lm1[0], h - lm1[1], lm1[2]])
+        # sock1.sendto(str.encode(str(data1)), serverAddressPort1)
 
-        # if handType1 == "Left" and handType1 != "Right":
-        #     for lm1 in lmList1:
-        #         data1.extend([lm1[0], h - lm1[1], lm1[2]])
-        #     sock1.sendto(str.encode(str(data1)), serverAddressPort1)
+        if handType1 == "Left" and handType1 != "Right":
+            for lm1 in lmList1:
+                data1.extend([lm1[0], h - lm1[1], lm1[2]])
+            sock1.sendto(str.encode(str(data1)), serverAddressPort1)
 
 
         if len(hands) ==2:

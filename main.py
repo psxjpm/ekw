@@ -39,17 +39,18 @@ while True:
         pointIndex1 = lmList1[8][0:2] #Switch to 0:3 for 3d
         #Starburst
         fingers1 = detector.fingersUp(hand1)
-        # for lm1 in lmList1:
-        #     data1.extend([lm1[0], h - lm1[1], lm1[2]])
-        # sock1.sendto(str.encode(str(data1)), serverAddressPort1)
 
-        if handType1 == "Left" and handType1 != "Right":
+        if handType1 == "Left":
             for lm1 in lmList1:
                 data1.extend([lm1[0], h - lm1[1], lm1[2]])
             sock1.sendto(str.encode(str(data1)), serverAddressPort1)
 
+        if handType1 == "Right":
+            for lm1 in lmList1:
+                data2.extend([lm1[0], h - lm1[1], lm1[2]])
+            sock2.sendto(str.encode(str(data2)), serverAddressPort2)
 
-        if len(hands) ==2:
+        if len(hands) == 2:
             # Hand 2
             hand2 = hands[1]
             lmList2 = hand2["lmList"]  # Get list of 21 Landmark points
@@ -60,9 +61,15 @@ while True:
             # Starburst
             fingers2 = detector.fingersUp(hand2)
 
-            for lm2 in lmList2:
-                data2.extend([lm2[0], h - lm2[1], lm2[2]])
-            sock2.sendto(str.encode(str(data2)), serverAddressPort2)
+            if handType1 == "Left":
+                for lm2 in lmList2:
+                    data2.extend([lm2[0], h - lm2[1], lm2[2]])
+                sock2.sendto(str.encode(str(data2)), serverAddressPort2)
+
+            if handType1 == "Right":
+                for lm2 in lmList2:
+                    data1.extend([lm2[0], h - lm2[1], lm2[2]])
+                sock1.sendto(str.encode(str(data1)), serverAddressPort1)
 
     # Display
     cv2.imshow("Image", cv2.flip(img, 1))
